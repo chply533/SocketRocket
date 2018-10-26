@@ -467,8 +467,14 @@ NSString *const SRHTTPResponseErrorKey = @"HTTPResponseStatusCode";
 {
     if (_requestRequiresSSL) {
         SRDebugLog(@"Setting up security for streams.");
-        [_securityPolicy updateSecurityOptionsInStream:_inputStream];
-        [_securityPolicy updateSecurityOptionsInStream:_outputStream];
+        // 设置SNI host信息，关键步骤
+        NSString *host = [_urlRequest.allHTTPHeaderFields objectForKey:@"host"];
+        if (!host) {
+            host = _urlRequest.URL.host;
+        }
+        
+        [_securityPolicy updateSecurityOptionsInStream:_inputStream forDomain:host];
+        [_securityPolicy updateSecurityOptionsInStream:_outputStream forDomain:host];
     }
 
     NSString *networkServiceType = SRStreamNetworkServiceTypeFromURLRequest(_urlRequest);

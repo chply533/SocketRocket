@@ -54,13 +54,13 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic pop
 }
 
-- (void)updateSecurityOptionsInStream:(NSStream *)stream
+- (void)updateSecurityOptionsInStream:(NSStream *)stream forDomain:(NSString *)domain
 {
     // Enforce TLS 1.2
     [stream setProperty:(__bridge id)CFSTR("kCFStreamSocketSecurityLevelTLSv1_2") forKey:(__bridge id)kCFStreamPropertySocketSecurityLevel];
 
     // Validate certificate chain for this stream if enabled.
-    NSDictionary<NSString *, id> *sslOptions = @{ (__bridge NSString *)kCFStreamSSLValidatesCertificateChain : @(self.certificateChainValidationEnabled) };
+    NSDictionary<NSString *, id> *sslOptions = @{ (__bridge NSString *)kCFStreamSSLValidatesCertificateChain : @(self.certificateChainValidationEnabled),(__bridge id) kCFStreamSSLPeerName : domain};
     [stream setProperty:sslOptions forKey:(__bridge NSString *)kCFStreamPropertySSLSettings];
 }
 

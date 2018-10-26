@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param stream Stream to update the options in.
  */
-- (void)updateSecurityOptionsInStream:(NSStream *)stream;
+- (void)updateSecurityOptionsInStream:(NSStream *)stream forDomain:(NSString *)domain;
 
 /**
  Whether or not the specified server trust should be accepted, based on the security policy.
